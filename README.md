@@ -1,2 +1,1 @@
-# scrapeSEO
-Scrape SEO
+# hoodScrape

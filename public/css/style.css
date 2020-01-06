@@ -1,0 +1,32 @@
+#articles {
+    color: white;
+    background-color: blue;
+}
+#notes {
+    color: blue;
+    display: flex;
+    flex-direction: column;
+}
+.scraped:hover {
+    color: black;
+    background-color: white;
+    animation: inflate 0.25s 1 alternate both;
+}
+button {
+    color: white;
+    background-color: black;
+}
+button:hover {
+    background-color: blue;
+}
+#bodyinput {
+    height: 250px;
+}
+
+/* KEYFRAMES */
+
+@keyframes inflate {
+    from{}
+    to {padding-top: 10px;
+        padding-bottom: 10px;}
+}

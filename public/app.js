@@ -27,6 +27,19 @@ $(document).on("click", "p", function() {
     });
 });
 
+$(document).on("click", "#scrapeNow", function() {
+  $.ajax({
+    method: "GET",
+    url: "/scrape",
+  }).then(function(){
+    $.getJSON("/articles", function(data) {
+      for (var i = 0; i < data.length; i++) {
+        $("#articles").append("<p class='scraped' data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+      }
+    });
+  });
+});
+
 $(document).on("click", "#savenote", function() {
   var thisId = $(this).attr("data-id");
 

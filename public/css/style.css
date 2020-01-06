@@ -22,6 +22,11 @@ button:hover {
 #bodyinput {
     height: 250px;
 }
+#scrape {
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 
 /* KEYFRAMES */
 

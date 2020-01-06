@@ -16,12 +16,32 @@ app.use(express.static("public"));
 mongoose.connect("mongodb://localhost/hoodscrape", { useNewUrlParser: true });
 
 
+function titleMatch (title){
+  db.Article.findOne({title: title}).then(
+    function(dbTitle){
+      console.log("===============" + dbTitle.title);
+      if(title === dbTitle.title){
+        return(false)
+      }
+      else{
+        return(true)
+      }
+    }).catch(function(err) {
+    console.log(err);
+  });
+};
+
+
 app.get("/scrape", function(req, res) {
+
   axios.get("https://blog.robinhood.com/").then(function(response) {
     var $ = cheerio.load(response.data);
 
     $(".entry-title").each(function(i, element) {
+      
+      
       console.log(this);
+
       var result = {};
       result.title = $(this)
         .children("a")
@@ -30,6 +50,12 @@ app.get("/scrape", function(req, res) {
         .children("a")
         .attr("href");
 
+        console.log("==============================>");
+        console.log(result.title);
+        console.log("==============================>");
+
+      if(titleMatch(result.title)){
+        console.log("NEW ARTICLE")
       db.Article.create(result)
         .then(function(dbArticle) {
           console.log(dbArticle);
@@ -37,9 +63,15 @@ app.get("/scrape", function(req, res) {
         .catch(function(err) {
           console.log(err);
         });
-    });
+        res.send("Scrape Complete");
+      }
+      else{
+        console.log("OLD MATCH")
+      }
 
-    res.send("Scrape Complete");
+
+    
+    });
   });
 });
 

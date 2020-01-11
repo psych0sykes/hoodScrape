@@ -16,16 +16,15 @@ app.use(express.static("public"));
 mongoose.connect("mongodb://localhost/hoodscrape", { useNewUrlParser: true });
 
 
-function titleMatch (title){
+function titleMatch (title,cb){
   db.Article.findOne({title: title}).then(
     function(dbTitle){
-      console.log("===============" + dbTitle.title);
-      if(title === dbTitle.title){
-        return(false)
+      if(dbTitle === null){
+        cb();
       }
       else{
-        return(true)
-      }
+        console.log("OLD MATCH");
+      };
     }).catch(function(err) {
     console.log(err);
   });
@@ -54,23 +53,17 @@ app.get("/scrape", function(req, res) {
         console.log(result.title);
         console.log("==============================>");
 
-      if(titleMatch(result.title)){
+      titleMatch(result.title, function(){
         console.log("NEW ARTICLE")
-      db.Article.create(result)
-        .then(function(dbArticle) {
-          console.log(dbArticle);
-        })
-        .catch(function(err) {
-          console.log(err);
-        });
-        res.send("Scrape Complete");
-      }
-      else{
-        console.log("OLD MATCH")
-      }
-
-
-    
+        db.Article.create(result)
+          .then(function(dbArticle) {
+            console.log(dbArticle);
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+          res.send("Scrape Complete");
+      })
     });
   });
 });
